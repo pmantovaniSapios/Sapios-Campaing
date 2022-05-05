@@ -23,7 +23,7 @@ async function result() {
 
         coon = await pool.getConnection()
         // Para alterar a quantidade de envio mude o LIMIT da query abaixo
-        let dados = await coon.query(`SELECT nome, phone FROM datacampaings where sent = 0 LIMIT 3`)
+        let dados = await coon.query(`SELECT nome, phone FROM datacampaings where sent = 0 LIMIT 2`)
         delete dados.meta;
         // console.log(dados)
 
@@ -32,9 +32,8 @@ async function result() {
                 from: "whatsapp:+5511933058090",
                 body: `Olá ${x.nome}, sou o atendente virtual da Hapvida, prazer! 
 
-            Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer? `,
+                Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer?`,
                 to: `whatsapp:+55${x.phone}`
-
             };
 
             twilioclient.messages
@@ -49,7 +48,7 @@ async function result() {
                     let dataAtual = `${dia}-${mes}-${ano} ${hora}:${minuto}`;
                     try {
                         console.log(message);
-                        coon.query(`UPDATE datacampaings SET sent=true, sid="${message.sid}", statusSend="${message.status}", dateSent="${dataAtual}", errorCode="${message.errorCode}", errorMessage="${message.errorMessage}", price="${message.price}", priceUnit="${message.priceUnit}", lastupdate=NOW() WHERE phone = "${x.phone}"`)
+                        coon.query(`UPDATE datacampaings SET sent=true, sid="${message.sid}", statusSend="${message.status}", dateSent="${dataAtual}", errorCode="${message.ErrorCode}", errorMessage="${message.ErrorMessage}", price="${message.price}", priceUnit="${message.priceUnit}", lastupdate=NOW() WHERE phone = "${x.phone}"`)
                     } catch (error) {
                         console.error(error)
                     }
@@ -73,5 +72,5 @@ setInterval(() => {
     let data = new Date()
     console.log("Reiniciando " + data);
     result()
-}, 180000);
+}, 60000);
 // Para mudar o tempo de envio mude o tempo do setInterval acima. (lembre de colocar em milesegundos)

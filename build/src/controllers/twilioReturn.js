@@ -20,8 +20,8 @@ function saveReturnDataTwilio(req, res) {
             yield coon.query(`
                 UPDATE datacampaings SET 
                     statusSend="${data.MessageStatus}",
-                    errorCode="${data.errorCode}",
-                    errorMessage="${data.errorMessage}",
+                    errorCode="${data.ErrorCode}",
+                    errorMessage="${data.ErrorMessage}",
                     price="${data.price}",
                     priceUnit="${data.priceUnit}",
                     lastupdate= NOW()
