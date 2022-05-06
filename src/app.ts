@@ -44,10 +44,9 @@ app.get("/", (req: any, res: any) => {
 
 app.post("/upload", upload.single("file"), (req: any, res: any) => {
     if (process.platform === "linux") {
-        console.log("passou pelo linux");
-        // csvToJsonAndUpload(req.file.filename)
+        csvToJsonAndUpload(req.file.filename)
     } else {
-        // csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
+        csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
     }
     res.render("index")
 })
