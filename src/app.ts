@@ -76,7 +76,7 @@ function csvToJsonAndUpload(filepath: any) {
             try {
                 coon = await pool.getConnection()
                 for (let index = 0; index < csvData.length; index++) {
-                    coon.query(`INSERT INTO datacampaings SET nome="${csvData[index].nome}", phone="${csvData[index].phone}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
+                    coon.query(`INSERT INTO datacampaings SET campaingsId=1, nome="${csvData[index].nome}", phone="${csvData[index].phone}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
                 }
 
             } catch (error) {
