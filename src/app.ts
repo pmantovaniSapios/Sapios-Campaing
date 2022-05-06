@@ -43,11 +43,11 @@ app.get("/", (req: any, res: any) => {
 })
 
 app.post("/upload", upload.single("file"), (req: any, res: any) => {
-    if (process.platform === "linux") {
-        csvToJsonAndUpload('/uploads/' + req.file.filename)
-    } else {
-        csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
-    }
+    // if (process.platform === "linux") {
+    //     csvToJsonAndUpload('/uploads/' + req.file.filename)
+    // } else {
+    //     csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
+    // }
     res.render("index")
 })
 
