@@ -13,7 +13,7 @@ app.set('view engine', 'ejs')
 
 const storage = multer.diskStorage({
     destination: function (req: any, file: any, cb: any) {
-        cb(null, "/uploads/")
+        cb(null, "")
     },
     filename: function (req: any, file: any, cb: any) {
         cb(null, file.originalname + Date.now() + path.extname(file.originalname))
@@ -43,11 +43,12 @@ app.get("/", (req: any, res: any) => {
 })
 
 app.post("/upload", upload.single("file"), (req: any, res: any) => {
-    // if (process.platform === "linux") {
-    //     csvToJsonAndUpload('/uploads/' + req.file.filename)
-    // } else {
-    //     csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
-    // }
+    if (process.platform === "linux") {
+        console.log("passou pelo linux");
+        // csvToJsonAndUpload(req.file.filename)
+    } else {
+        // csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
+    }
     res.render("index")
 })
 
