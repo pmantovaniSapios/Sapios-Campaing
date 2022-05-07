@@ -48,7 +48,7 @@ async function result() {
                     let dataAtual = `${dia}-${mes}-${ano} ${hora}:${minuto}`;
                     try {
                         console.log(message);
-                        coon.query(`UPDATE datacampaings SET campaingsId=1 sent=true, sid="${message.sid}", statusSend="${message.status}", dateSent="${dataAtual}", errorCode="${message.ErrorCode}", errorMessage="${message.ErrorMessage}", price="${message.price}", priceUnit="${message.priceUnit}", lastupdate=NOW() WHERE phone = "${x.phone}"`)
+                        coon.query(`UPDATE datacampaings SET campaingsId=1, sent=true, sid="${message.sid}", statusSend="${message.status}", dateSent="${dataAtual}", errorCode="${message.ErrorCode}", errorMessage="${message.ErrorMessage}", price="${message.price}", priceUnit="${message.priceUnit}", lastupdate=NOW() WHERE phone = "${x.phone}"`)
                     } catch (error) {
                         console.error(error)
                     }
