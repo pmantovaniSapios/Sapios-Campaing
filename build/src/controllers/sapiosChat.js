@@ -16,20 +16,25 @@ function saveReturnDataSC(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let coon;
         try {
+            coon = yield db_1.pool.getConnection();
             const data = req.body;
             let tag = data.tags;
             let phone = data.visitor.phone[0].phoneNumber;
             let _id = data._id;
             (0, querystring_1.stringify)(tag).replace(/[\[\]']+/g, '');
-            coon = yield db_1.pool.getConnection();
-            yield coon.query(`
-                UPDATE datacampaings SET 
-                    finishedStatus="${tag}",
-                    transbordo="${_id}",
-                    lastupdate= NOW()
-                WHERE
-                    phone = "${phone}"
-        `);
+            if (tag == "" || phone == "") {
+                console.error(`Error: ${_id} sent user without tag`);
+            }
+            else {
+                yield coon.query(`
+                    UPDATE datacampaings SET 
+                        finishedStatus="${tag}",
+                        transbordo="${_id}",
+                        lastupdate= NOW()
+                    WHERE
+                        phone = "${phone}"
+            `);
+            }
             res.end();
         }
         catch (error) {

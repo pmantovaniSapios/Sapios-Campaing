@@ -44,7 +44,7 @@ const app = (0, express_1.default)();
 app.set('view engine', 'ejs');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "/src/uploads/");
+        cb(null, "");
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname + Date.now() + path_1.default.extname(file.originalname));
@@ -58,7 +58,7 @@ const pool = mariadb_1.default.createPool({
     host: 'localhost',
     user: 'root',
     password: 'sapios',
-    database: 'campaing',
+    database: 'teste',
     port: 3306,
     connectionLimit: 5
 });
@@ -68,7 +68,7 @@ app.get("/", (req, res) => {
 });
 app.post("/upload", upload.single("file"), (req, res) => {
     if (process.platform === "linux") {
-        csvToJsonAndUpload('/uploads/' + req.file.filename);
+        csvToJsonAndUpload(req.file.filename);
     }
     else {
         csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename);
