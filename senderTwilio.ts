@@ -23,7 +23,7 @@ async function result() {
 
         coon = await pool.getConnection()
         // Para alterar a quantidade de envio mude o LIMIT da query abaixo
-        let dados = await coon.query(`SELECT nome, phone FROM datacampaings where sent = 0 LIMIT 2`)
+        let dados = await coon.query(`SELECT nome, phone FROM datacampaings where sent = 0 LIMIT 3`)
         delete dados.meta;
         // console.log(dados)
 
