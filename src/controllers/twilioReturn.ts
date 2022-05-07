@@ -11,8 +11,8 @@ export async function saveReturnDataTwilio(req: Request, res: Response) {
         await coon.query(`
                 UPDATE datacampaings SET 
                     statusSend="${data.MessageStatus}",
-                    errorCode="${data.ErrorCode}",
-                    errorMessage="${data.ErrorMessage}",
+                    errorCode="${data.errorCode}",
+                    errorMessage="${data.errorMessage}",
                     price="${data.price}",
                     priceUnit="${data.priceUnit}",
                     lastupdate= NOW()

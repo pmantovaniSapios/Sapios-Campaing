@@ -13,7 +13,12 @@ app.set('view engine', 'ejs')
 
 const storage = multer.diskStorage({
     destination: function (req: any, file: any, cb: any) {
-        cb(null, "")
+
+        if (process.platform === "linux") {
+            cb(null, "")
+        } else {
+            cb(null, "")
+        }
     },
     filename: function (req: any, file: any, cb: any) {
         cb(null, file.originalname + Date.now() + path.extname(file.originalname))
@@ -28,10 +33,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Database connection
 const pool = mariadb.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'sapios',
-    database: 'teste',
+    host: 'connector.sapios.com.br',
+    user: 'sapios',
+    password: 'sapios852456',
+    database: 'campaing',
     port: 3306,
     connectionLimit: 5
 })
@@ -46,7 +51,7 @@ app.post("/upload", upload.single("file"), (req: any, res: any) => {
     if (process.platform === "linux") {
         csvToJsonAndUpload(req.file.filename)
     } else {
-        csvToJsonAndUpload(__dirname + 'uploads/' + req.file.filename)
+        csvToJsonAndUpload(req.file.filename)
     }
     res.render("index")
 })
@@ -77,6 +82,8 @@ function csvToJsonAndUpload(filepath: any) {
                 coon = await pool.getConnection()
                 for (let index = 0; index < csvData.length; index++) {
                     coon.query(`INSERT INTO datacampaings SET campaingsId=1, nome="${csvData[index].nome}", phone="${csvData[index].phone}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
+                    console.log("passou aqui");
+
                 }
 
             } catch (error) {
