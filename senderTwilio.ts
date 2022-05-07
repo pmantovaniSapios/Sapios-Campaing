@@ -29,7 +29,7 @@ async function result() {
 
         dados.map((x: any) => {
             let twilioSendMessage = {
-                from: "whatsapp:+5511933058090",
+                from: "whatsapp:+558521805535",
                 body: `Olá ${x.nome}, sou o atendente virtual da Hapvida, prazer! 
 
                 Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer?`,
