@@ -18,6 +18,13 @@ export async function saveReturnDataSC(req: Request, res: Response) {
 
         if (tag == "" || phone == "") {
             console.error(`Error: ${_id} sent user without tag`);
+            await coon.query(`
+                    UPDATE datacampaings SET
+                        transbordo="${_id}",
+                        lastupdate= NOW()
+                    WHERE
+                        phone = "${phone}"
+            `)
         } else {
             await coon.query(`
                     UPDATE datacampaings SET 
