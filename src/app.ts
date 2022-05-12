@@ -53,7 +53,7 @@ app.post("/upload", upload.single("file"), (req: any, res: any) => {
     } else {
         csvToJsonAndUpload(req.file.filename)
     }
-    res.render("index")
+    res.render("upload")
 })
 
 function csvToJsonAndUpload(filepath: any) {
