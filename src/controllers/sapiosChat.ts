@@ -15,7 +15,6 @@ export async function saveReturnDataSC(req: Request, res: Response) {
 
         stringify(tag).replace(/[\[\]']+/g, '')
 
-
         if (tag == "" || phone == "") {
             console.error(`Error: ${_id} sent user without tag`);
             await coon.query(`

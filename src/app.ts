@@ -41,7 +41,7 @@ const pool = mariadb.createPool({
     connectionLimit: 5
 })
 
-app.use("/webhook", router);
+app.use(router);
 
 app.get("/", (req: any, res: any) => {
     res.render("index")
@@ -82,8 +82,6 @@ function csvToJsonAndUpload(filepath: any) {
                 coon = await pool.getConnection()
                 for (let index = 0; index < csvData.length; index++) {
                     coon.query(`INSERT INTO datacampaings SET campaingsId=1, nome="${csvData[index].nome}", phone="${csvData[index].phone}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
-                    console.log("passou aqui");
-
                 }
 
             } catch (error) {

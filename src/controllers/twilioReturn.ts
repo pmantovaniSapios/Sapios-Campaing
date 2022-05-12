@@ -5,6 +5,7 @@ export async function saveReturnDataTwilio(req: Request, res: Response) {
     let coon;
     try {
         const data = req.body;
+        console.log(data);
 
         coon = await pool.getConnection()
 

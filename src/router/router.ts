@@ -2,9 +2,15 @@ import { Router } from "express";
 import { saveReturnDataTwilio } from "../controllers/twilioReturn";
 import { saveReturnDataSC } from "../controllers/sapiosChat";
 import { saveEngaged } from "../controllers/updateEngage";
+import { onOffSender } from "../controllers/onOffSender";
+import { quantPerShip } from "../controllers/quantPerShip";
+import { onOffGetValue } from "../controllers/onOffGetValue";
 const router = Router();
 
 export default router
-    .post("/twilio", saveReturnDataTwilio)
-    .post("/tags", saveReturnDataSC)
-    .post("/engaged", saveEngaged)
+    .post("/webhook/twilio", saveReturnDataTwilio)
+    .post("/webhook/tags", saveReturnDataSC)
+    .post("/webhook/engaged", saveEngaged)
+    .post("/onOff", onOffSender)
+    .post("/quantPerShip", quantPerShip)
+    .get("/onOff", onOffGetValue)
