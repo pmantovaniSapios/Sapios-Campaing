@@ -40,9 +40,9 @@ var accountSid = process.env.TWILIO_ACCOUNT_SID;
 var authToken = process.env.TWILIO_AUTH_TOKEN;
 var twilioclient = require('twilio')(accountSid, authToken);
 var pool = mariadb.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'sapios',
+    host: 'connector.sapios.com.br',
+    user: 'sapios',
+    password: 'sapios852456',
     database: 'campaing',
     port: 3306,
     connectionLimit: 5
@@ -69,7 +69,7 @@ function main() {
                     parametros = _a.sent();
                     delete parametros.meta;
                     console.log(parametros[0].quantidadePorEnvio);
-                    return [4 /*yield*/, coon.query("SELECT nome, phone FROM datacampaings where sent = 0 LIMIT ".concat(parametros[0].quantidadePorEnvio))];
+                    return [4 /*yield*/, coon.query("SELECT nome, phone FROM datacampaings where sent = 0 AND id = 4 LIMIT ".concat(parametros[0].quantidadePorEnvio))];
                 case 5:
                     dados = _a.sent();
                     delete dados.meta;
@@ -79,9 +79,9 @@ function main() {
                     return [3 /*break*/, 8];
                 case 6: return [4 /*yield*/, dados.map(function (x) {
                         var twilioSendMessage = {
-                            from: "whatsapp:+5511933058090",
-                            body: "Telesul: houve um ".concat(x.nome, " no processamento de seus dados: ").concat(x.phone),
-                            to: "whatsapp:+55".concat(x.phone)
+                            from: "whatsapp:+558521805535",
+                            body: "Ol\u00E1 ".concat(x.nome, ", sou o atendente virtual da Hapvida, prazer! \n\n                        Vi que voc\u00EA solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer?"),
+                            to: "whatsapp:+5511990274065"
                         };
                         twilioclient.messages
                             .create(twilioSendMessage)
@@ -126,6 +126,6 @@ setInterval(function () {
     var data = new Date();
     console.log("Reiniciando " + data);
     main();
-}, 1000);
+}, 60000);
 // Para mudar o tempo de envio mude o tempo do setInterval acima. (lembre de colocar em milesegundos) 60000
 // result()
