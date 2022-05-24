@@ -1,5 +1,6 @@
 require("dotenv").config();
 import * as csv from '@fast-csv/parse';
+import { pool } from "../config/db";
 import config from "config";
 import express from "express";
 import fs from "fs";
@@ -31,15 +32,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// Database connection
-const pool = mariadb.createPool({
-    host: 'connector.sapios.com.br',
-    user: 'sapios',
-    password: 'sapios852456',
-    database: 'campaing',
-    port: 3306,
-    connectionLimit: 5
-})
+// // Database connection
+// const pool = mariadb.createPool({
+//     host: 'connector.sapios.com.br',
+//     user: 'sapios',
+//     password: 'sapios852456',
+//     database: 'campaing',
+//     port: 3306,
+//     connectionLimit: 5
+// })
 
 app.use(router);
 
@@ -58,11 +59,6 @@ app.post("/upload", upload.single("file"), (req: any, res: any) => {
 
 function csvToJsonAndUpload(filepath: any) {
     let stream = fs.createReadStream(filepath);
-    type info = {
-        id: number;
-        nome: string;
-        phone: string;
-    };
     let csvData: Array<any> = [];
     let csvStream = csv
         .parse({ headers: true })
@@ -81,9 +77,8 @@ function csvToJsonAndUpload(filepath: any) {
             try {
                 coon = await pool.getConnection()
                 for (let index = 0; index < csvData.length; index++) {
-                    coon.query(`INSERT INTO datacampaings SET campaingsId=1, nome="${csvData[index].nome}", phone="${csvData[index].phone}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
+                    coon.query(`INSERT INTO datacampaings SET campaingsId=1, nome="${csvData[index].nome}", phone="${csvData[index].phone}", field01="${csvData[index].field01}", field02="${csvData[index].field02}", field03="${csvData[index].field03}", field04="${csvData[index].field04}", field05="${csvData[index].field05}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
                 }
-
             } catch (error) {
                 console.error(error);
             } finally {

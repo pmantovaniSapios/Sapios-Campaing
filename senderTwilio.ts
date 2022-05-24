@@ -1,19 +1,10 @@
 require("dotenv").config();
-const mariadb = require('mariadb');
+import { pool } from "./config/db";
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 let twilioclient = require('twilio')(accountSid, authToken);
-
-const pool = mariadb.createPool({
-    host: 'connector.sapios.com.br',
-    user: 'sapios',
-    password: 'sapios852456',
-    database: 'campaing',
-    port: 3306,
-    connectionLimit: 5
-})
 
 async function main() {
 
