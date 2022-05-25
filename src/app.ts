@@ -35,16 +35,13 @@ app.get("/", (req: any, res: any) => {
     res.render("index");
 })
 
-app.get("/upload", (req: any, res: any) => {
-    res.render("upload");
-})
-
 app.post("/upload", upload.single("file"), (req: any, res: any) => {
     if (process.platform === "linux") {
         csvToJsonAndUpload(req.file.filename);
     } else {
         csvToJsonAndUpload(req.file.filename);
     }
+    res.render("upload")
 })
 
 const port = config.get<number>("port") || 7000;
