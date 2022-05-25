@@ -11,7 +11,7 @@ export async function saveEngaged(req: Request, res: Response) {
         await coon.query(`
                 UPDATE datacampaings SET
                     engaged="${data.engaged}",
-                    lastupdate= NOW()
+                    lastupdate=NOW()
                 WHERE
                     phone = "${data.phone}"
         `)

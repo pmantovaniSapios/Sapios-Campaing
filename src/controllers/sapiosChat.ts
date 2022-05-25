@@ -20,7 +20,7 @@ export async function saveReturnDataSC(req: Request, res: Response) {
             await coon.query(`
                     UPDATE datacampaings SET
                         transbordo="${_id}",
-                        lastupdate= NOW()
+                        lastupdate=NOW()
                     WHERE
                         phone = "${phone}"
             `)

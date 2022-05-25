@@ -1,12 +1,10 @@
 require("dotenv").config();
-import * as csv from '@fast-csv/parse';
-import { pool } from "../config/db";
 import config from "config";
 import express from "express";
-import fs from "fs";
-import path from "path";
 import router from "./router/router";
-import mariadb from "mariadb";
+import path from "path";
+import { csvToJsonAndUpload } from "./lib/csvToJsonAndUpload";
+import Logger from "../config/logger";
 const multer = require("multer");
 const app = express();
 
@@ -14,9 +12,8 @@ app.set('view engine', 'ejs')
 
 const storage = multer.diskStorage({
     destination: function (req: any, file: any, cb: any) {
-
         if (process.platform === "linux") {
-            cb(null, "")
+            cb(null, "./src/uploads/")
         } else {
             cb(null, "")
         }
@@ -26,72 +23,29 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({ storage })
+const upload = multer({ storage });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-// // Database connection
-// const pool = mariadb.createPool({
-//     host: 'connector.sapios.com.br',
-//     user: 'sapios',
-//     password: 'sapios852456',
-//     database: 'campaing',
-//     port: 3306,
-//     connectionLimit: 5
-// })
-
 app.use(router);
 
+// Load initial page
 app.get("/", (req: any, res: any) => {
-    res.render("index")
+    res.render("index");
 })
 
 app.post("/upload", upload.single("file"), (req: any, res: any) => {
     if (process.platform === "linux") {
-        csvToJsonAndUpload(req.file.filename)
+        csvToJsonAndUpload("./src/uploads/" + req.file.filename);
     } else {
-        csvToJsonAndUpload(req.file.filename)
+        csvToJsonAndUpload(req.file.filename);
     }
-    res.render("upload")
+    res.render("upload");
 })
-
-function csvToJsonAndUpload(filepath: any) {
-    let stream = fs.createReadStream(filepath);
-    let csvData: Array<any> = [];
-    let csvStream = csv
-        .parse({ headers: true })
-        .transform(
-            (data: any) => ({
-                id: data.id,
-                nome: data.nome,
-                phone: data.phone,
-            })
-        )
-        .on("data", function (data) {
-            csvData.push(data);
-        })
-        .on("end", async function () {
-            let coon: any;
-            try {
-                coon = await pool.getConnection()
-                for (let index = 0; index < csvData.length; index++) {
-                    coon.query(`INSERT INTO datacampaings SET campaingsId=1, nome="${csvData[index].nome}", phone="${csvData[index].phone}", field01="${csvData[index].field01}", field02="${csvData[index].field02}", field03="${csvData[index].field03}", field04="${csvData[index].field04}", field05="${csvData[index].field05}" ON DUPLICATE KEY UPDATE nome = "${csvData[index].nome}", phone = "${csvData[index].phone}"`);
-                }
-            } catch (error) {
-                console.error(error);
-            } finally {
-                if (coon) coon.release();
-                console.log("Closed");
-            }
-            fs.unlinkSync(filepath)
-        });
-    stream.pipe(csvStream);
-}
 
 const port = config.get<number>("port") || 7000;
 
 app.listen(port, async () => {
-    console.log(`Running on port: ${port}`);
+    Logger.info(`Running on port: ${port}`);
 });

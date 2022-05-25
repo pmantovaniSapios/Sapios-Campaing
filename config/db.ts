@@ -1,3 +1,4 @@
+require("dotenv").config();
 import mariadb from "mariadb";
 
 export const pool = mariadb.createPool({

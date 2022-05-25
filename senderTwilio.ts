@@ -1,15 +1,13 @@
 require("dotenv").config();
-import { pool } from "./config/db";
-
+const mariadb = require('mariadb');
+const pool = mariadb.createPool({host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_DATABASE, connectionLimit: 5});
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 let twilioclient = require('twilio')(accountSid, authToken);
 
 async function main() {
-
     let coon: any;
-
     try {
 
         coon = await pool.getConnection()
@@ -32,10 +30,10 @@ async function main() {
             } else {
                 await dados.map((x: any) => {
                     let twilioSendMessage = {
-                        from: "whatsapp:+558521805535",
+                        from: process.env.TWILIO_PHONE,
                         body: `Olá ${x.nome}, sou o atendente virtual da Hapvida, prazer! 
 
-                        Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer?`,
+                        Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer? `,
                         to: `whatsapp:+55${x.phone}`
                     };
 

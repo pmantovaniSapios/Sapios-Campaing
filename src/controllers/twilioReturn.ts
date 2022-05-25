@@ -16,7 +16,7 @@ export async function saveReturnDataTwilio(req: Request, res: Response) {
                     errorMessage="${data.ErrorMessage}",
                     price="${data.price}",
                     priceUnit="${data.priceUnit}",
-                    lastupdate= NOW()
+                    lastupdate=NOW()
                 WHERE
                     sid = "${data.SmsSid}"
         `)

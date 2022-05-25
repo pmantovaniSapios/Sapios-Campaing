@@ -5,6 +5,7 @@ import { saveEngaged } from "../controllers/updateEngage";
 import { onOffSender } from "../controllers/onOffSender";
 import { quantPerShip } from "../controllers/quantPerShip";
 import { onOffGetValue } from "../controllers/onOffGetValue";
+import { returnDataFromPhone } from "../controllers/returnDataFromPhone";
 const router = Router();
 
 export default router
@@ -14,3 +15,4 @@ export default router
     .post("/onOff", onOffSender)
     .post("/quantPerShip", quantPerShip)
     .get("/onOff", onOffGetValue)
+    .get("/info/:phone", returnDataFromPhone)
