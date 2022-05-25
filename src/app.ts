@@ -41,7 +41,7 @@ app.post("/upload", upload.single("file"), (req: any, res: any) => {
     } else {
         csvToJsonAndUpload(req.file.filename);
     }
-    res.render("upload");
+    res.render("/hap/upload");
 })
 
 const port = config.get<number>("port") || 7000;

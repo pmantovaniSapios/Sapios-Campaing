@@ -91,11 +91,13 @@ export async function csvToJsonAndUpload(filepath: any) {
                             `).then((res: any) => {
                             // TODO- Adicionando cada mudança em um array para retornar depois
                             // LOG - console.log(`affectedRows: ${res.affectedRows}, insertId: ${res.insertId}, warningStatus: ${res.warningStatus}`); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+                            console.log(res);
                             conn.end();
                         })
                             .catch(err => {
                                 // TODO - Tratar o erro na query e retornar
                                 // LOG - console.log("Caiu Aqui: " + err);
+                                console.log(err);
                                 conn.end();
                             })
                     }
@@ -103,6 +105,8 @@ export async function csvToJsonAndUpload(filepath: any) {
                 }).catch((err: any) => {
                     // TODO - Retornar problema de conexão com o DB
                     // LOG - console.error("Erro de Conexão com o DB: " + err);
+                    console.log(err);
+                    
                 });
             fs.unlinkSync(filepath)
         });
