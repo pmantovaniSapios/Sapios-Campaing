@@ -77,7 +77,7 @@ async function main() {
                         from: process.env.TWILIO_PHONE,
                         body: `Olá ${x.nome}, sou o atendente virtual da Hapvida, prazer! 
 
-                        Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer? `,
+                        Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer?`,
                         to: `whatsapp:+55${x.phone}`
                     };
 
