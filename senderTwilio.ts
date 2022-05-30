@@ -1,5 +1,49 @@
 require("dotenv").config();
 const mariadb = require('mariadb');
+const winston = require('winston');
+
+const levels = {
+    error: 0,
+    warn: 1,
+    info: 2,
+    http: 3,
+    debug: 4
+}
+const colors = {
+    error: "red",
+    warn: "yellow",
+    info: "green",
+    http: "magenta",
+    debug: "white"
+}
+winston.addColors(colors)
+
+const format = winston.format.combine(
+    winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+    winston.format.colorize({ all: true }),
+    winston.format.json(
+        (info: any) => `${info.timestamp} - ${info.level} : ${info.message}`
+    )
+);
+
+let today = new Date();
+let date = today.getFullYear()+'-'+(today.getMonth()+1);
+
+const transports = [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: `./src/logs/campaing_info_${date}.log` }),
+    new winston.transports.File({
+        filename: `./src/logs/campaing_error_${date}.log`,
+        level: "error"
+    })
+];
+
+const Logger = winston.createLogger({
+    levels,
+    format,
+    transports
+});
+
 const pool = mariadb.createPool({host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_DATABASE, connectionLimit: 5});
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -40,21 +84,26 @@ async function main() {
                     twilioclient.messages
                         .create(twilioSendMessage)
                         .then((message: any) => {
-                            let data = new Date();
-                            let dia = String(data.getDate()).padStart(2, '0');
-                            let mes = String(data.getMonth() + 1).padStart(2, '0');
-                            let ano = data.getFullYear();
-                            let hora = String(data.getHours()).padStart(2, '0');
-                            let minuto = String(data.getMinutes()).padStart(2, '0');
-                            let dataAtual = `${dia}-${mes}-${ano} ${hora}:${minuto}`;
                             try {
-                                console.log(message);
-                                coon.query(`UPDATE datacampaings SET campaingsId=1, sent=true, sid="${message.sid}", statusSend="${message.status}", dateSent="${dataAtual}", errorCode="${message.ErrorCode}", errorMessage="${message.ErrorMessage}", price="${message.price}", priceUnit="${message.priceUnit}", lastupdate=NOW() WHERE phone = "${x.phone}"`)
+                                Logger.info(message)
+                                coon.query(`UPDATE datacampaings SET 
+                                                campaingsId=1, 
+                                                sent=true, 
+                                                sid="${message.sid}", 
+                                                statusSend="${message.status}", 
+                                                dateSent=NOW(), 
+                                                errorCode="${message.ErrorCode}", 
+                                                errorMessage="${message.ErrorMessage}", 
+                                                price="${message.price}", 
+                                                priceUnit="${message.priceUnit}", 
+                                                lastupdate=NOW() 
+                                                    WHERE 
+                                                phone = "${x.phone}"`)
                             } catch (error) {
-                                console.error(error)
+                                Logger.error(error)
                             }
-                        }).catch((err: any) => {
-                            console.error("error " + err);
+                        }).catch((error: any) => {
+                            Logger.error(error)
                         })
                         .done();
                 });
@@ -63,19 +112,15 @@ async function main() {
 
 
     } catch (error) {
-        console.log(error);
+        Logger.log(error);
     } finally {
         if (coon) coon.release();
     }
 
 }
 
-
-
 setInterval(() => {
-    let data = new Date()
-    console.log("Reiniciando " + data);
     main()
-}, 60000);
+}, 10000);
 // Para mudar o tempo de envio mude o tempo do setInterval acima. (lembre de colocar em milesegundos) 60000
 // result()
