@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { stringify } from "querystring";
+import Lookups from "twilio/lib/rest/Lookups";
 import { pool } from "../../config/db"
+import Logger from "../../config/logger";
 
 export async function saveReturnDataSC(req: Request, res: Response) {
     let coon;
@@ -14,9 +16,10 @@ export async function saveReturnDataSC(req: Request, res: Response) {
         let _id = data._id;
 
         stringify(tag).replace(/[\[\]']+/g, '')
+        Logger.info(tag)
 
         if (tag == "" || phone == "") {
-            console.error(`Error: ${_id} sent user without tag`);
+            Logger.error(`Error: ${_id} sent user without tag`);
             await coon.query(`
                     UPDATE datacampaings SET
                         transbordo="${_id}",
@@ -38,7 +41,7 @@ export async function saveReturnDataSC(req: Request, res: Response) {
         res.end()
 
     } catch (error) {
-        console.log(error);
+        Logger.error(error);
     } finally {
         if (coon) coon.release();
     }

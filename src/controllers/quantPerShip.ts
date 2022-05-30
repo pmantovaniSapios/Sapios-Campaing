@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { pool } from "../../config/db"
+import { pool } from "../../config/db";
+import Logger from "../../config/logger";
 
 export async function quantPerShip(req: Request, res: Response) {
     let coon;
     try {
         const data = req.body;
-        // console.log(data);
 
         coon = await pool.getConnection();
 
@@ -21,7 +21,7 @@ export async function quantPerShip(req: Request, res: Response) {
         }
 
     } catch (error) {
-        console.error(error);
+        Logger.error(error);
     } finally {
         if (coon) coon.release();
     }

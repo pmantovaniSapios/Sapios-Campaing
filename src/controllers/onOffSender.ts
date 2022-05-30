@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { pool } from "../../config/db"
+import Logger from "../../config/logger";
 
 export async function onOffSender(req: Request, res: Response) {
     let coon;
@@ -26,7 +27,7 @@ export async function onOffSender(req: Request, res: Response) {
             return res.send({ "error": true, "message": "Informações cedidas não batem com o sistema" });
         }
     } catch (error) {
-        console.log(error)
+        Logger.error(error)
     } finally {
         if (coon) coon.release();
     }

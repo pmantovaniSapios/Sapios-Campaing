@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { pool } from "../../config/db"
+import { pool } from "../../config/db";
+import Logger from "../../config/logger";
 
 export async function saveReturnDataTwilio(req: Request, res: Response) {
     let coon;
     try {
         const data = req.body;
-        console.log(data);
+        Logger.info(data)
 
         coon = await pool.getConnection()
 
@@ -23,7 +24,7 @@ export async function saveReturnDataTwilio(req: Request, res: Response) {
 
         res.end()
     } catch (error) {
-        console.log(error)
+        Logger.error(error)
     } finally {
         if (coon) coon.release();
     }

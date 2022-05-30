@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { pool } from "../../config/db";
+import Logger from "../../config/logger";
 
 export async function returnDataFromPhone(req: Request, res: Response) {
     try {
@@ -14,19 +15,19 @@ export async function returnDataFromPhone(req: Request, res: Response) {
                             return res.status(200).json({ "return": true, "data": rows[0] });
                         })
                         .catch(err => {
-                            console.log(err);
+                            Logger.error(err);
                             conn.end();
                             return res.status(200).json({ "return": false, "error": "Information not found" })
                         })
                 }).catch(err => {
-                    console.error(err);
+                    Logger.error(err);
                     return res.status(200).json({ "return": false, "error": "Problem with database" })
                 });
         } else {
             return res.status(200).json({ "return": false, "error": "Unexpected phone" })
         }
     } catch (error: any) {
-        console.error(error);
+        Logger.error(error);
         return res.status(200).json({ "return": false })
     }
 }

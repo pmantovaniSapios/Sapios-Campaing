@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { pool } from "../../config/db"
+import Logger from "../../config/logger";
 
 export async function onOffGetValue(req: Request, res: Response) {
     let coon;
@@ -16,7 +17,7 @@ export async function onOffGetValue(req: Request, res: Response) {
 
         return res.send({ service: true, active: result[0].completo })
     } catch (error) {
-        console.log(error);
+        Logger.error(error);
     } finally {
         if (coon) coon.release();
     }
