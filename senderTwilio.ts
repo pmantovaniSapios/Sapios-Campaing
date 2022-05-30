@@ -21,7 +21,7 @@ winston.addColors(colors)
 const format = winston.format.combine(
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     winston.format.colorize({ all: true }),
-    winston.format.json(
+    winston.format.printf(
         (info: any) => `${info.timestamp} - ${info.level} : ${info.message}`
     )
 );
@@ -77,7 +77,7 @@ async function main() {
                         from: process.env.TWILIO_PHONE,
                         body: `Olá ${x.nome}, sou o atendente virtual da Hapvida, prazer! 
 
-                        Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer?`,
+                        Vi que você solicitou o cancelamento do seu plano e gostaria de te encaminhar para um dos nossos consultores te apresentar uma proposta exclusiva baseada no seu perfil, quer conhecer? `,
                         to: `whatsapp:+55${x.phone}`
                     };
 
@@ -91,7 +91,7 @@ async function main() {
                                                 sent=true, 
                                                 sid="${message.sid}", 
                                                 statusSend="${message.status}", 
-                                                dataSentNew=NOW(), 
+                                                dateSent=NOW(), 
                                                 errorCode="${message.ErrorCode}", 
                                                 errorMessage="${message.ErrorMessage}", 
                                                 price="${message.price}", 
@@ -109,7 +109,6 @@ async function main() {
                 });
             }
         }
-
 
     } catch (error) {
         Logger.log(error);
