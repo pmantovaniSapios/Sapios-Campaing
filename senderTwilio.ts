@@ -47,6 +47,7 @@ const Logger = winston.createLogger({
 const pool = mariadb.createPool({host: process.env.DB_HOST, user: process.env.DB_USER, password: process.env.DB_PASSWORD, database: process.env.DB_DATABASE, connectionLimit: 5});
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+const interval: any = process.env.INTERVAL_CALL_SENDER
 
 let twilioclient = require('twilio')(accountSid, authToken);
 
@@ -120,6 +121,6 @@ async function main() {
 
 setInterval(() => {
     main()
-}, 60000);
+}, interval);
 // Para mudar o tempo de envio mude o tempo do setInterval acima. (lembre de colocar em milesegundos) 60000
 // result()
