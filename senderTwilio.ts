@@ -122,5 +122,3 @@ async function main() {
 setInterval(() => {
     main()
 }, interval);
-// Para mudar o tempo de envio mude o tempo do setInterval acima. (lembre de colocar em milesegundos) 60000
-// result()
