@@ -91,7 +91,7 @@ async function main() {
                                                 sent=true, 
                                                 sid="${message.sid}", 
                                                 statusSend="${message.status}", 
-                                                dateSent=NOW(), 
+                                                dataSentNew=NOW(), 
                                                 errorCode="${message.ErrorCode}", 
                                                 errorMessage="${message.ErrorMessage}", 
                                                 price="${message.price}", 
