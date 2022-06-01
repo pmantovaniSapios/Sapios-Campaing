@@ -1,49 +1,16 @@
-import * as csv from '@fast-csv/parse';
+import { Request, Response } from "express";
 import { pool } from "../../config/db";
-import fs from "fs";
-import Logger from '../../config/logger';
+import Logger from "../../config/logger";
 
+export async function dataFromCSV(req: Request, res: Response) {
+    let csvData = req.body;
+    console.log(csvData);
 
-export async function csvToJsonAndUpload(filepath: any) {
-    let stream = fs.createReadStream(filepath);
-    let csvData: Array<any> = [];
-    let csvStream = csv
-        .parse({ headers: true, ignoreEmpty: true })
-        .transform((data: any) => ({
-                id: data.id,
-                nome: data.nome,
-                phone: data.phone,
-                field01: data.field01,
-                field02: data.field02,
-                field03: data.field03,
-                field04: data.field04,
-                field05: data.field05,
-                field06: data.field06,
-                field07: data.field07,
-                field08: data.field08,
-                field09: data.field09,
-                field10: data.field10,
-                field11: data.field11,
-                field12: data.field12,
-                field13: data.field13,
-                field14: data.field14,
-                field15: data.field15,
-                field16: data.field16,
-                field17: data.field17,
-                field18: data.field18,
-                field19: data.field19,
-                field20: data.field20,
-            })
-        )
-        .on("data", function (data) {
-            csvData.push(data);
-        })
-        .on("end", async () => {
-            await pool.getConnection()
-                .then(conn => {
-                    
-                    for (let index = 0; index < csvData.length; index++) {
-                        conn.query(`INSERT INTO datacampaings SET 
+    await pool.getConnection()
+        .then(conn => {
+
+            for (let index = 0; index < csvData.length; index++) {
+                conn.query(`INSERT INTO datacampaings SET 
                                     campaingsId=1, 
                                     nome="${csvData[index].nome}", 
                                     phone="${csvData[index].phone}", 
@@ -89,25 +56,19 @@ export async function csvToJsonAndUpload(filepath: any) {
                                             field17="${csvData[index].field17}", 
                                             field18="${csvData[index].field18}", 
                                             field19="${csvData[index].field19}", 
-                                            field20="${csvData[index].field20}"
-                            `).then((res: any) => {
-                            conn.end();
-                        })
-                            .catch(err => {
-                                // TODO - Tratar o erro na query e retornar
-                                // LOG - console.log("Caiu Aqui: " + err);
-                                // console.log(err);
-                                Logger.error(err)
-                                conn.end();
-                            })
-                    }
-                
-                }).catch((err: any) => {
-                    Logger.error(err)
-                });
-            fs.unlinkSync(filepath)
+                                            field20="${csvData[index].field20}"`)
+                    .then((res: any) => {
+                        conn.end();
+                    })
+                    .catch(err => {
+                        Logger.error(err)
+                        conn.end();
+                    })
+            }
+
+        }).catch((err: any) => {
+            Logger.error(err)
         });
-    stream.pipe(csvStream);
-    return { status: true}
-    //{ status: true, inserted: `Quatidade de dados inseridos: ${count}` }
+
+    return { finished: true }
 }

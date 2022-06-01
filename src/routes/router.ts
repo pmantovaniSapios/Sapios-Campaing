@@ -6,6 +6,7 @@ import { onOffSender } from "../controllers/onOffSender";
 import { quantPerShip } from "../controllers/quantPerShip";
 import { onOffGetValue } from "../controllers/onOffGetValue";
 import { returnDataFromPhone } from "../controllers/returnDataFromPhone";
+import { dataFromCSV } from "../controllers/dataFromCSV";
 const router = Router();
 
 export default router
@@ -16,3 +17,4 @@ export default router
     .post("/quantPerShip", quantPerShip)
     .get("/onOff", onOffGetValue)
     .get("/info/:phone", returnDataFromPhone)
+    .post("/datafromcsv", dataFromCSV)
