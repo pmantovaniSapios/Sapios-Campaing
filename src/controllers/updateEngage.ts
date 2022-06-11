@@ -15,7 +15,7 @@ export async function saveEngaged(req: Request, res: Response) {
                     engaged="${data.engaged}",
                     lastupdate=NOW()
                 WHERE
-                    phone = "${data.phone}"
+                    phone = "${data.phone}" and campaingsId = "${data.campaingsId}"
         `);
 
         res.end();
