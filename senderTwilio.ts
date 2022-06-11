@@ -66,7 +66,7 @@ async function main() {
             delete parametros.meta;
             console.log(parametros[0].quantidadePorEnvio);
 
-            let dados = await coon.query(`SELECT nome, phone FROM datacampaings where sent = 0 LIMIT ${parametros[0].quantidadePorEnvio}`);
+            let dados = await coon.query(`SELECT campaingsId, nome, phone FROM datacampaings where sent = 0 LIMIT ${parametros[0].quantidadePorEnvio}`);
             delete dados.meta;
             console.log(dados)
 
@@ -87,8 +87,7 @@ async function main() {
                         .then((message: any) => {
                             try {
                                 Logger.info(message)
-                                coon.query(`UPDATE datacampaings SET 
-                                                campaingsId=1, 
+                                coon.query(`UPDATE datacampaings SET
                                                 sent=true, 
                                                 sid="${message.sid}", 
                                                 statusSend="${message.status}", 
@@ -99,7 +98,7 @@ async function main() {
                                                 priceUnit="${message.priceUnit}", 
                                                 lastupdate=NOW() 
                                                     WHERE 
-                                                phone = "${x.phone}"`)
+                                                phone = "${x.phone}" and sent=false, campaingsId=${dados.campaingsId}`)
                             } catch (error) {
                                 Logger.error(error)
                             }
