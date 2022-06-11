@@ -98,7 +98,7 @@ async function main() {
                                                 priceUnit="${message.priceUnit}", 
                                                 lastupdate=NOW() 
                                                     WHERE 
-                                                phone = "${x.phone}" and sent=false, campaingsId=${dados.campaingsId}`)
+                                                phone = "${x.phone}" and sent=false`)
                             } catch (error) {
                                 Logger.error(error)
                             }
